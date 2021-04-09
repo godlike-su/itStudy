@@ -1,0 +1,66 @@
+package com.itStudy.util;
+
+public class Global
+{
+    //文件映射位置
+    static FileStore fileStore = new FileStore("c:/itStudy/", "/");
+
+    // 临时图片的存储位置
+    static FileStore tmpStore = new FileStore("c:/itStudy/tmp/", "/tmp/");
+
+    // 图片的存储位置
+    static FileStore photoStore = new FileStore("c:/itStudy/photo/", "/photo/");
+
+    //帖子图片保存路径
+    static FileStore messageStore = new FileStore("c:/itStudy/article/", "/article/");
+
+    //头像保存路径
+    static FileStore thumbStore = new FileStore("c:/itStudy/thumb/", "/thumb/");
+
+
+
+    //认证缓存名字
+    static String authenticationCache = "";
+
+    //授权缓存名字
+    static String authorizationCache = "";
+
+    static String Module = "itStudyModule";
+
+    public static String getModule()
+    {
+        return Module;
+    }
+
+    public static FileStore getTmpStore()
+    {
+        return tmpStore;
+    }
+
+    public static FileStore getThumbStore()
+    {
+        return thumbStore;
+    }
+
+    public static FileStore getPhotoStore()
+    {
+        return photoStore;
+    }
+
+    public static FileStore getMessageStore()
+    {
+        return messageStore;
+    }
+
+    public static String getAuthenticationCache()
+    {
+        return authenticationCache;
+    }
+
+    public static String getAuthorizationCache()
+    {
+        return authorizationCache;
+    }
+
+
+}

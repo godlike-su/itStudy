@@ -14,16 +14,19 @@ public class Global
     //帖子图片保存路径
     static FileStore messageStore = new FileStore("c:/itStudy/article/", "/article/");
 
+    //问题图片保存路径
+    static FileStore analysisStore = new FileStore("c:/itStudy/analysis/", "/analysis/");
+
     //头像保存路径
     static FileStore thumbStore = new FileStore("c:/itStudy/thumb/", "/thumb/");
 
 
 
     //认证缓存名字
-    static String authenticationCache = "";
+    static String authenticationCache = "AuthenticationCache";
 
     //授权缓存名字
-    static String authorizationCache = "";
+    static String authorizationCache = "AuthorizationCache";
 
     static String Module = "itStudyModule";
 
@@ -50,6 +53,11 @@ public class Global
     public static FileStore getMessageStore()
     {
         return messageStore;
+    }
+
+    public static FileStore getAnalysisStoreStore()
+    {
+        return analysisStore;
     }
 
     public static String getAuthenticationCache()

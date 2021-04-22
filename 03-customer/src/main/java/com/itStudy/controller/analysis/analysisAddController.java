@@ -3,7 +3,7 @@ package com.itStudy.controller.analysis;
 import com.alibaba.fastjson.JSONObject;
 import com.itStudy.entity.Analysis;
 import com.itStudy.entity.User;
-import com.itStudy.service.AnalysistService;
+import com.itStudy.service.AnalysisService;
 import com.itStudy.spring.AfRestData;
 import com.itStudy.util.Global;
 import com.itStudy.util.MyUtil;
@@ -24,7 +24,7 @@ import java.util.Date;
 public class analysisAddController
 {
     @Autowired
-    private AnalysistService analysisService;
+    private AnalysisService analysisService;
 
     @PostMapping("/writeAnalysis.do")
     public Object writeAnalysis(@RequestBody JSONObject jreq)
@@ -64,7 +64,7 @@ public class analysisAddController
         File tmpFile = Global.getTmpStore().getFile(tmpName);
 
         //获取入库图片路径
-        File storeDir = Global.getMessageStore().getFile(storePath);
+        File storeDir = Global.getAnalysisStoreStore().getFile(storePath);
 //        System.out.println("tmp: " + tmpFile.getAbsolutePath());
 //        System.out.println("storeDir: " + storeDir.getAbsolutePath());
         try

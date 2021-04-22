@@ -16,20 +16,20 @@
         </collection>
     </resultMap>
 
-    <select id="findPermsByUserName" parameterType="String" resultMap="userMap">
-        SELECT u.`id` uid,u.`name`,p.`id` permsid,p.`permissions` permissions
+    <select id="findPermsByUserId" parameterType="integer" resultMap="userMap">
+        SELECT u.`id` uid,u.`name`, u.salt ,p.`id` permsid,p.`permissions` permissions
         FROM user u LEFT JOIN user_perms up ON u.`id` = up.`userid`
         LEFT JOIN perms p
         ON up.`permsId` = p.`id`
-        WHERE u.`name`= #{name}
+        WHERE u.`id`= #{id}
     </select>
 
-    <select id="findByUserName" parameterType="String" resultType="com.itStudy.entity.User">
-        SELECT id, name, salt, password, phone, qqid, sex, thumb
-        FROM user WHERE name = #{name}
+    <select id="findByUserStudentID" parameterType="String" resultType="com.itStudy.entity.User">
+        SELECT id, name, salt, password, phone, qqid, sex, thumb, studentID
+        FROM user WHERE studentID = #{studentID}
     </select>
 
-    <select id="findbyArticleRef1" parameterType="int" resultType="com.itStudy.entity.User">
+    <select id="findbyArticleRef1" parameterType="integer" resultType="com.itStudy.entity.User">
         SELECT id, name, thumb, vip  FROM user WHERE id = #{id}
     </select>
 

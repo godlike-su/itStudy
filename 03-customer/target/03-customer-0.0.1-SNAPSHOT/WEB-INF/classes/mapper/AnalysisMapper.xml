@@ -19,10 +19,6 @@
         <if test="cat1!=0">
             AND a.`cat1` = #{cat1}
         </if>
-        AND a.`delFlag` = 0
-        AND a.`draft` = 0
-        AND a.`ref1` = 0
-        AND a.`audit` = 0
         ORDER BY timeUpdate DESC
         LIMIT #{startIndex}, 10
     </select>
@@ -31,18 +27,15 @@
     <select id="findAnalysisById" parameterType="long" resultType="hashmap">
         SELECT u.id AS createId, u.name, u.thumb, a.id, a.content,
             a.cat1, a.timeUpdate, a.storePath, a.img1, a.img2, a.img3,
-            a.numReply, a.numLike
+            a.numReply, a.numLike, a.draft, a.audit
         FROM analysis a
         LEFT JOIN user u ON a.`creator` = u.`id`
         WHERE
         a.`delFlag` = 0
-        AND a.`draft` = 0
+--         AND a.`draft` = 0
+--         AND a.`audit` = 0
         AND a.`ref1` = 0
-        AND a.`audit` = 0
         AND a.`delFlag` = 0
-        AND a.`draft` = 0
-        AND a.`ref1` = 0
-        AND a.`audit` = 0
         AND a.`id` = #{id}
     </select>
 
@@ -85,6 +78,19 @@
         ORDER BY id
     </select>
 
+    <select id="myhomeAnalysis" parameterType="Integer" resultType="hashmap">
+        SELECT u.id AS createId, u.name, u.thumb, a.id,
+        a.content, a.cat1, a.timeUpdate, a.storePath, a.draft, a.audit,
+        a.img1, a.img2, a.img3, a.`numLike`, a.`numReply`
+        FROM analysis a
+        LEFT JOIN user u ON a.`creator` = u.`id`
+        WHERE
+        a.`delFlag` = 0
+        AND a.creator = #{myId}
+        AND a.`ref1` = 0
+        ORDER BY draft DESC, audit DESC,timeUpdate DESC
+        LIMIT #{startIndex}, 10
+    </select>
 
 
 

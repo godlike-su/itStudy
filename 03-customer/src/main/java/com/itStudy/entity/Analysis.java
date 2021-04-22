@@ -32,7 +32,7 @@ public class Analysis
     private Byte audit;
     private Byte draft;
     private Integer numReply;
-    private Integer numCollect;
+    private Integer numStart;
     private Integer numLike;
     private String storePath;
     private String img1;

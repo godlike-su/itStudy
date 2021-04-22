@@ -5,7 +5,9 @@ import com.itStudy.entity.User;
 import com.itStudy.service.UserService;
 import com.itStudy.spring.AfRestData;
 import com.itStudy.spring.AfRestError;
+import com.itStudy.util.ApplicationContextUtils;
 import com.itStudy.util.SaltUtil;
+import com.itStudy.util.VerifyCodeUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -13,14 +15,19 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 public class LoginController
@@ -34,13 +41,46 @@ public class LoginController
     {
         String name = jreq.getString("name");
         String password = jreq.getString("password");
+        try
+        {
+            int studentID = Integer.parseInt(jreq.getString("name"));
+        }catch (Exception e)
+        {
+            return new AfRestError("学号格式错误");
+        }
 
         //安全监测，验证码监测
-//        String state = jreq.getString("state");
-//        if (true)
-//        {
-//            return new AfRestError("验证码错误或超时，请刷新验证码");
-//        }
+        String verifyToken = jreq.getString("verifyToken").trim();
+        String verify = jreq.getString("verify").trim();
+        if(verifyToken.length() <= 0)
+        {
+            return new AfRestError("验证码出错，请刷新页面后重试!");
+        }
+        if(verify.length() <= 0)
+        {
+            return new AfRestError("验证码不能为空!");
+        }
+        else if(verify.length() != 4)
+        {
+            return new AfRestError("验证码错误!");
+        }
+        else
+        {
+            String state = (String) getRedisTemplate().opsForValue().get(verifyToken);
+            if(state.length() <= 0)
+            {
+                return new AfRestError("验证码已过期，前刷新重试!");
+            }
+            else if(!state.toUpperCase().equals(verify.toUpperCase()))
+            {
+                return new AfRestError("验证码错误!");
+            }
+            else if(state.toUpperCase().equals(verify.toUpperCase()))
+            {
+                //成功，删除redis的数据
+                getRedisTemplate().opsForValue().getOperations().delete(verifyToken);
+            }
+        }
 
         boolean isSave = jreq.getBoolean("isSave");
         try
@@ -56,13 +96,13 @@ public class LoginController
                 subject.getSession().setTimeout(86400000);
             }else {
                 //否则保存30分钟
-//                subject.getSession().setTimeout(1800000);
-                subject.getSession().setTimeout(86400000);
+                subject.getSession().setTimeout(1800000);
+//                subject.getSession().setTimeout(86400000);
             }
             //获取sessionId token
             String sessionId = (String) subject.getSession().getId();
 
-            User user = userService.findByUserName(name);
+            User user = userService.findByUserStudentID(name);
             JSONObject object = new JSONObject(true);
             object.put("sessionId", sessionId);
             object.put("name", user.getName());
@@ -90,25 +130,62 @@ public class LoginController
     public Object register(@RequestBody JSONObject jreq) throws Exception
     {
         //安全监测，验证码监测
-//        String state = (String) jreq.get("state");
-//        if (!state.equalsIgnoreCase((String)session.getAttribute("code")))
+//        String verifyToken = jreq.getString("verifyToken").trim();
+//        String verify = jreq.getString("verify").trim();
+//        if(verifyToken.length() <= 0)
 //        {
-//            return new AfRestError("验证码错误或超时，请刷新验证码");
+//            return new AfRestError("验证码出错，请刷新页面后重试!");
 //        }
-
-//        User user = jreq.getObject("user", User.class);
+//        if(verify.length() <= 0)
+//        {
+//            return new AfRestError("验证码不能为空!");
+//        }
+//        else if(verify.length() != 4)
+//        {
+//            return new AfRestError("验证码错误!");
+//        }
+//        else
+//        {
+//            String state = (String) getRedisTemplate().opsForValue().get("verifyToken");
+//            if(state.length() <= 0)
+//            {
+//                return new AfRestError("验证码已过期，前刷新重试!");
+//            }
+//            else if(!state.toUpperCase().equals(verify.toUpperCase()))
+//            {
+//                return new AfRestError("验证码错误!");
+//            }
+//            else if(state.toUpperCase().equals(verify.toUpperCase()))
+//            {
+//                //成功，删除redis的数据
+//                getRedisTemplate().opsForValue().getOperations().delete(verifyToken);
+//            }
+//        }
 
 
         User user = new User();
+        int studentID = 0;
+        try
+        {
+            studentID = Integer.parseInt(jreq.getString("name"));
+        }
+        catch (Exception e)
+        {
+            return new AfRestError("学号格式不正确");
+        }
 
+        user.setStudentID(jreq.getString("name"));
         user.setName(jreq.getString("name"));
         user.setPassword(jreq.getString("password"));
         user.setSex(false);
         user.setVipName("非会员");
 
+
+        user.setBirthday(new Date());
         user.setTimeCreate(new Date());
         user.setTimeLogin(new Date());
         user.setTimeUpdate(new Date());
+
 
         if (user.getName() == null)
         {
@@ -138,7 +215,19 @@ public class LoginController
         {
             // id重复时抛出异常
             //com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException
-            return new AfRestError("用户名被占用或者输入格式不正确");
+            return new AfRestError("学号被占用或者输入格式不正确");
+        }
+
+        try
+        {
+            if(user.getId().equals(null))
+            {
+                return new AfRestError("学号被占用或者输入格式不正确");
+            }
+        }
+        catch (Exception e)
+        {
+            return new AfRestError("学号被占用或者输入格式不正确");
         }
 
         return new AfRestData(user.getName());
@@ -151,4 +240,27 @@ public class LoginController
         subject.logout();
         return new AfRestData("退出登录");
     }
+
+    //验证码图片
+    @RequestMapping("getImage")
+    public void getImage(HttpServletRequest request, HttpServletResponse response) throws IOException
+    {
+        String verifyToken = request.getParameter("verifyToken");
+        //生成验证码
+        String code = VerifyCodeUtils.generateVerifyCode(4);
+        //将验证码放入redis,保存时间为5分钟
+        getRedisTemplate().opsForValue().set(verifyToken, code, 300000, TimeUnit.MILLISECONDS);
+//        session.setAttribute("code",code);
+        //验证码存入图片
+        ServletOutputStream os = response.getOutputStream();
+        response.setContentType("image/png");
+        VerifyCodeUtils.outputImage(220,60,os,code);
+    }
+    private RedisTemplate getRedisTemplate(){
+        RedisTemplate redisTemplate = (RedisTemplate) ApplicationContextUtils.getBean("redisTemplate");
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        return redisTemplate;
+    }
+
 }

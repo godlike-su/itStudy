@@ -8,8 +8,6 @@ import com.itStudy.entity.*;
 import com.itStudy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
@@ -30,11 +28,11 @@ public class UserServiceImpl implements UserService
     private FollowerDao followerDao;
 
     @Override
-    public User findByUserName(String name)
+    public User findByUserStudentID(String StudentID)
     {
         try
         {
-            return userDao.findByUserName(name);
+            return userDao.findByUserStudentID(StudentID);
         } catch (Exception e)
         {
             return null;
@@ -42,9 +40,17 @@ public class UserServiceImpl implements UserService
     }
 
     @Override
-    public User findPermsByUserName(String name)
+    public User findPermsByUserId(int id)
     {
-        return userDao.findPermsByUserName(name);
+        return userDao.findPermsByUserId(id);
+    }
+
+    @Override
+    public User findByUserId(int id)
+    {
+        User user = new User();
+        user.setId(id);
+        return userDao.selectByPrimaryKey(user);
     }
 
     @Override
@@ -179,5 +185,14 @@ public class UserServiceImpl implements UserService
         follower.setO_id(o_id);
         follower = followerDao.selectByPrimaryKey(follower);
         return follower;
+    }
+
+    @Override
+    public int updatePassword(int id, String password)
+    {
+        User user = new User();
+        user.setId(id);
+        user.setPassword(password);
+        return userDao.updateByPrimaryKeySelective(user);
     }
 }

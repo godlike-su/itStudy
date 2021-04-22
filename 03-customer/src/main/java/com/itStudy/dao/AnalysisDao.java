@@ -27,4 +27,14 @@ public interface AnalysisDao extends Mapper<Analysis>
 
     List<Map> myhomeAnalysis(int myId, int startIndex);
 
+    //他人问题首页数据
+    List<Map> otherhomeAnalysis(int userId, int startIndex);
+
+    //修改int类型的数据 增加
+    int analysisUpdateStartAdd(int analysisId, String type, int operating);
+
+    //修改int类型的数据 减
+    int analysisUpdateStartDec(int analysisId, String type, int operating);
+
+
 }

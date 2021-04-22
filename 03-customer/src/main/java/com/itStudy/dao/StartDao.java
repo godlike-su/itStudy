@@ -12,6 +12,9 @@ import java.util.Map;
 public interface StartDao extends Mapper<Start>
 {
     //查看我的关注列表
-    List<Article> homeStart(int userId, int startIndex);
+    List<Map> homeStart(int userId, int startIndex);
+
+    //查看关注的问题
+    List<Map> myStartAnalysisList(int userId, int startIndex);
 
 }

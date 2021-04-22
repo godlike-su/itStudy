@@ -6,10 +6,13 @@ import com.itStudy.entity.User;
 public interface UserService
 {
     //根据名查询一个用户
-    User findByUserName(String name);
+    User findByUserStudentID(String StudentID);
 
-    //根据用户名获取权限与身份
-    User findPermsByUserName(String name);
+    //根据id获取权限与身份
+    User findPermsByUserId(int id);
+
+    //根据id获取身份信息
+    User findByUserId(int id);
 
     //注册用户
     void register(User user);
@@ -26,4 +29,7 @@ public interface UserService
     int setInterest(int m_id, int o_id, int follow);
 
     Follower showFollowerOne(int m_id, int o_id);
+
+    //修改密码
+    int updatePassword(int id, String password);
 }

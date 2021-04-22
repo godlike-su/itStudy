@@ -1,8 +1,5 @@
 package com.itStudy.service;
 
-import com.itStudy.entity.Article;
-import com.itStudy.entity.Start;
-
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +12,11 @@ public interface StartService
 
     int deletStart(int userId, int aId, int startType);
 
-    int startCount(int userId);
+    int startCount(int userId, int startType);
 
-    List<Article> homeStart(int userId, int startIndex);
+    List<Map> homeStart(int userId, int startIndex);
+
+    List<Map> myStartAnalysisList(int userId, int startIndex);
+
+
 }

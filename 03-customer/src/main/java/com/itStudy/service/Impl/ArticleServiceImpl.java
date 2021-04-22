@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ArticleServiceImpl implements ArticleService
@@ -29,9 +30,16 @@ public class ArticleServiceImpl implements ArticleService
     }
 
     @Override
-    public List<Article> homeArticle(int cat1, Integer pageNumber)
+    public List<Map> homeArticle(int cat1, Integer pageNumber)
     {
         return articleDao.homeArticle(cat1, pageNumber);
+    }
+
+    @Override
+    public List<Map> homeArticleHold(Integer pageNumber)
+    {
+
+        return articleDao.homeArticleHold(pageNumber);
     }
 
     @Override
@@ -41,9 +49,25 @@ public class ArticleServiceImpl implements ArticleService
         Example example = new Example(Article.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("cat1", cat1);
+        criteria.andEqualTo("ref2", 0);  //不是评论
         criteria.andEqualTo("draft", 0);  //不为草稿
         criteria.andEqualTo("audit", 0);    //通过审核
-        criteria.andEqualTo("form", 0);     //发布为公平模式
+        criteria.andEqualTo("form", 0);     //发布为公开模式
+        criteria.andEqualTo("delFlag", 0);     //不是删除文章
+
+        return articleDao.selectCountByExample(example);
+    }
+
+    @Override
+    public int homeArticleHoldCount()
+    {
+        //查询总数的筛选条件
+        Example example = new Example(Article.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("ref2", 0);    //不是评论
+        criteria.andEqualTo("draft", 0);  //不为草稿
+        criteria.andEqualTo("audit", 0);    //通过审核
+        criteria.andEqualTo("form", 0);     //发布为公开模式
         criteria.andEqualTo("delFlag", 0);     //不是删除文章
 
         return articleDao.selectCountByExample(example);
@@ -65,7 +89,7 @@ public class ArticleServiceImpl implements ArticleService
     }
 
     @Override
-    public List<Article> historyArticle(List articleIdList)
+    public List<Map> historyArticle(List articleIdList)
     {
         return articleDao.historyArticle(articleIdList);
     }
@@ -84,9 +108,31 @@ public class ArticleServiceImpl implements ArticleService
     }
 
     @Override
-    public List<Article> myhomeArticle(int myId, int pageNumber, int cat1)
+    public int otherHomeArticleCount(int userId, int pageNumber)
+    {
+        //查询总数的筛选条件
+        Example example = new Example(Article.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("cat2", 0);   //原帖
+        criteria.andEqualTo("creator", userId);     //创作者id
+        criteria.andEqualTo("delFlag", 0);     //不是删除文章
+        criteria.andEqualTo("audit", 0);     //审核通过文章
+        criteria.andEqualTo("form", 0);     //公开文章
+        criteria.andEqualTo("draft", 0);     //不是草稿
+
+        return articleDao.selectCountByExample(example);
+    }
+
+    @Override
+    public List<Map> myhomeArticle(int myId, int pageNumber, int cat1)
     {
         return articleDao.myhomeArticle(myId, pageNumber, 0);
+    }
+
+    @Override
+    public List<Map> otherHomeArticle(int userId, int pageNumber)
+    {
+        return articleDao.otherHomeArticle(userId, pageNumber);
     }
 
     @Override
@@ -118,7 +164,7 @@ public class ArticleServiceImpl implements ArticleService
         {
             i = articleDao.articleUpdateStartDec(articleId, type, 0);
         }
-        //等于0说明要执行增操作
+        //等于1说明要执行增操作
         else if(operating == 1)
         {
             i = articleDao.articleUpdateStartAdd(articleId, type, 1);
@@ -128,7 +174,7 @@ public class ArticleServiceImpl implements ArticleService
             System.out.println("没有任何操作!");
             return 0;
         }
-        return 0;
+        return i;
     }
 
 

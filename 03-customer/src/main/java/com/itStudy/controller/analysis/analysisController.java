@@ -3,17 +3,18 @@ package com.itStudy.controller.analysis;
 import com.alibaba.fastjson.JSONObject;
 import com.itStudy.entity.Analysis;
 import com.itStudy.entity.Follower;
-import com.itStudy.service.AnalysistService;
+import com.itStudy.service.AnalysisService;
+import com.itStudy.service.StartService;
 import com.itStudy.service.UserService;
 import com.itStudy.spring.AfRestData;
 import com.itStudy.spring.AfRestError;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,9 +22,11 @@ import java.util.Map;
 public class analysisController
 {
     @Autowired
-    private AnalysistService analysisService;
+    private AnalysisService analysisService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private StartService startService;
 
     //你问我答首页
     @PostMapping("/analysisList.do")
@@ -63,13 +66,17 @@ public class analysisController
     public Object analysisOne(@RequestBody JSONObject jreq)
     {
         Analysis analysis = jreq.getObject("analysis", Analysis.class);
+        int startType= jreq.getInteger("startType");
+
         Map map = analysisService.findAnalysisById(analysis.getId());
         //访问的是是否关注了
         Follower follower = new Follower();
         String m_id = null;
+        Map start = new HashMap();
         try{
             m_id = SecurityUtils.getSubject().getPrincipal().toString();
             follower = userService.showFollowerOne(Integer.parseInt(m_id), (Integer) map.get("createId"));
+            start = startService.showStartOne(Integer.parseInt(m_id), analysis.getId().intValue(), startType);
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -78,6 +85,7 @@ public class analysisController
             String create = String.valueOf(map.get("createId"));
             if(m_id.equals(create))
             {
+                //如果是本人，那么查看不受审核等限制
 
             }
             else
@@ -90,6 +98,7 @@ public class analysisController
         JSONObject data = new JSONObject(true);
         data.put("analysis", map);
         data.put("follower", follower);
+        data.put("start", start.get("start"));
         return new AfRestData(data);
     }
 

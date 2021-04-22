@@ -1,8 +1,7 @@
 package com.itStudy.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.itStudy.entity.Article;
-import com.itStudy.entity.Start;
+import com.itStudy.service.AnalysisService;
 import com.itStudy.service.ArticleService;
 import com.itStudy.service.StartService;
 import com.itStudy.spring.AfRestData;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Map;
 
 //收藏操作
 @Controller
@@ -26,6 +26,9 @@ public class StartController
 
     @Autowired
     private ArticleService articleService;
+
+    @Autowired
+    private AnalysisService analysistService;
 
     @PostMapping("/updateStart.do")
     Object updateStart(@RequestBody JSONObject jreq) throws Exception
@@ -39,20 +42,28 @@ public class StartController
         if(start == 0)
         {
             i = startService.insertStart(userId, aId, startType);
-            //文章收藏数+1
-            if(i == 1)
+            //文章收藏数+1 问题+1
+            if(i == 1 && startType == 0)
             {
-                articleService.articleUpdateInt(userId, "numStart", 1);
+                articleService.articleUpdateInt(aId, "numStart", 1);
+            }
+            else if(i == 1 && startType == 1)
+            {
+                analysistService.analysisUpdateStart(aId, "numStart", 1);
             }
         }
         else if(start == 1)
         {
             //取消收藏
             i = startService.deletStart(userId, aId, startType);
-            //文章收藏数-1
-            if(i == 1)
+            //文章收藏数-1 问题-1
+            if(i == 1 && startType == 0)
             {
-                articleService.articleUpdateInt(userId, "numStart", 0);
+                articleService.articleUpdateInt(aId, "numStart", 0);
+            }
+            else if(i == 1 && startType == 1)
+            {
+                analysistService.analysisUpdateStart(aId, "numStart", 0);
             }
         }
         else
@@ -63,7 +74,7 @@ public class StartController
         return new AfRestData(i);
     }
 
-    @PostMapping("/showStartAll.do")
+//    @PostMapping("/showStartAll.do")
     Object showStartAll(@RequestBody JSONObject jreq) throws Exception
     {
         int userId = Integer.parseInt(SecurityUtils.getSubject().getPrincipal().toString());
@@ -77,7 +88,7 @@ public class StartController
         }
 
         //count：符合条件的记录一共有多少条
-        int count = startService.startCount(userId);
+        int count = startService.startCount(userId, 0);
 
         //一页显示的数据量
         int pageSize = 10;
@@ -87,7 +98,7 @@ public class StartController
         //查询开始的页数
         int startIndex = pageSize * (pageNumber - 1);
 
-        List<Article> startList = startService.homeStart(userId, startIndex);
+        List<Map> startList = startService.homeStart(userId, startIndex);
 
         JSONObject json = new JSONObject(true);
         json.put("article", startList);

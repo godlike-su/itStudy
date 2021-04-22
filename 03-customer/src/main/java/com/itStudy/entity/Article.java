@@ -18,7 +18,7 @@ public class Article
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY,generator = "JDBC")
 	private Integer id ; 
-	private String creator ;
+	private Integer creator ;
 	private String title ; 
 	private String text ; 
 	private String content ; 

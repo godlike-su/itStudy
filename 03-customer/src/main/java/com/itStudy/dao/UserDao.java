@@ -8,10 +8,10 @@ import tk.mybatis.mapper.common.Mapper;
 public interface UserDao extends Mapper<User>
 {
     //根据名查询一个用户
-    User findByUserName(String name);
+    User findByUserStudentID(String studentID);
 
     //根据用户名获取权限与身份
-    User findPermsByUserName(String name);
+    User findPermsByUserId(int id);
 
     User findbyArticleRef1(int id);
 }

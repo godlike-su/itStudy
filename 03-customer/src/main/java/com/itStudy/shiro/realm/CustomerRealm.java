@@ -32,7 +32,7 @@ public class CustomerRealm extends AuthorizingRealm
         String primaryPrincipal = (String)principals.getPrimaryPrincipal();
         System.out.println("调用校权认证：" + primaryPrincipal);
         //根据主身份信息获取角色 和 权限信息
-        User user = userService.findPermsByUserName(primaryPrincipal);
+        User user = userService.findPermsByUserId(Integer.parseInt(primaryPrincipal));
 
         //授权角色信息
         if(!CollectionUtils.isEmpty(user.getPerms()))
@@ -61,13 +61,12 @@ public class CustomerRealm extends AuthorizingRealm
         String principal = (String) token.getPrincipal();
 
         //在工厂中获取service对象
-        User user = userService.findByUserName(principal);
+        User user = userService.findByUserStudentID(principal);
         if(!ObjectUtils.isEmpty(user)){
             return new SimpleAuthenticationInfo(user.getId(),user.getPassword(),
                     new MyByteSource(user.getSalt()),
                     this.getName());
         }
-        System.out.println("----------------------");
         return null;
     }
 }

@@ -1,7 +1,7 @@
 package com.itStudy.controller.analysis;
 
 import com.alibaba.fastjson.JSONObject;
-import com.itStudy.service.AnalysistService;
+import com.itStudy.service.AnalysisService;
 import com.itStudy.service.UserService;
 import com.itStudy.spring.AfRestData;
 import com.itStudy.spring.AfRestError;
@@ -22,7 +22,7 @@ import java.util.Map;
 public class analysisReplyContoller
 {
     @Autowired
-    private AnalysistService analysisService;
+    private AnalysisService analysisService;
     @Autowired
     private UserService userService;
 

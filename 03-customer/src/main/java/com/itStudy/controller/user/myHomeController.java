@@ -1,8 +1,7 @@
 package com.itStudy.controller.user;
 
 import com.alibaba.fastjson.JSONObject;
-import com.itStudy.entity.Article;
-import com.itStudy.service.AnalysistService;
+import com.itStudy.service.AnalysisService;
 import com.itStudy.service.ArticleService;
 import com.itStudy.service.StartService;
 import com.itStudy.service.UserService;
@@ -30,7 +29,7 @@ public class myHomeController
     private ArticleService articleService;
 
     @Autowired
-    private AnalysistService analysisService;
+    private AnalysisService analysisService;
 
     @Autowired
     private StartService startService;
@@ -60,7 +59,7 @@ public class myHomeController
         //查询开始的页数
         int startIndex = pageSize * (pageNumber - 1);
 
-        List<Article> article = articleService.myhomeArticle(myId, startIndex, 0);
+        List<Map> article = articleService.myhomeArticle(myId, startIndex, 0);
 
         JSONObject json = new JSONObject(true);
         json.put("article", article);
@@ -117,7 +116,7 @@ public class myHomeController
         }
 
         //count：查看自己的收藏一共有多少条
-        int count = startService.startCount(myId);
+        int count = startService.startCount(myId, 0);
 
         //一页显示的数据量
         int pageSize = 10;
@@ -127,7 +126,7 @@ public class myHomeController
         //查询开始的页数
         int startIndex = pageSize * (pageNumber - 1);
 
-        List<Article> article = startService.homeStart(myId, startIndex);
+        List<Map> article = startService.homeStart(myId, startIndex);
 
         JSONObject json = new JSONObject(true);
         json.put("article", article);
@@ -136,6 +135,39 @@ public class myHomeController
 
         return new AfRestData(json
         );
+    }
+
+    //收藏的问题
+    @PostMapping("/myStartAnalysisList.do")
+    public Object myStartAnalysisList(@RequestBody JSONObject jreq)
+    {
+        int myId = Integer.parseInt(SecurityUtils.getSubject().getPrincipal().toString());
+        int pageNumber = 1;
+        int cat1 = 0;
+        try
+        {
+            pageNumber = jreq.getInteger("pageNumber");
+        }catch (Exception e)
+        {
+            return new AfRestError("没有页码");
+        }
+
+        int totalitems = startService.startCount(myId, 1);
+
+        //一页显示的数据量
+        int pageSize = 10;
+        //总页数
+        int pageCount = totalitems / pageSize;
+        if (totalitems % pageSize != 0) pageCount += 1;
+        //查询开始的页数
+        int startIndex = pageSize * (pageNumber - 1);
+
+        List<Map> analysisList = startService.myStartAnalysisList(myId, startIndex);
+        JSONObject data = new JSONObject(true);
+        data.put("analysisList", analysisList);
+        data.put("pageCount", pageCount);
+        data.put("totalitems", totalitems);
+        return new AfRestData(data);
     }
 
 

@@ -62,7 +62,48 @@ public class articleController
         //查询开始的页数
         int startIndex = pageSize * (pageNumber - 1);
 
-        List<Article> article = articleService.homeArticle(typeId, startIndex);
+        List<Map> article = articleService.homeArticle(typeId, startIndex);
+
+        JSONObject json = new JSONObject(true);
+        json.put("article", article);
+        json.put("pageCount", pageCount);
+
+        return new AfRestData(json);
+    }
+
+    //首页文章热榜加载
+    @PostMapping("/homeArticleHold.do")
+    public Object homeArticleHold(@RequestBody JSONObject jreq) throws Exception
+    {
+//        int typeId = 5;
+        int pageNumber = 1;
+        try
+        {
+//            typeId = jreq.getInteger("typeId");
+            pageNumber = jreq.getInteger("pageNumber");
+        }catch (Exception e)
+        {
+            return new AfRestError("未识别到页码，请刷新重试!");
+        }
+
+        //count：符合条件的记录一共有多少条
+        int count = articleService.homeArticleHoldCount();
+
+        //热榜最多加载50条数据
+        if(count >= 50)
+        {
+            count = 50;
+        }
+
+        //一页显示的数据量
+        int pageSize = 10;
+        //总页数
+        int pageCount = count / pageSize;
+        if (count % pageSize != 0) pageCount += 1;
+        //查询开始的页数
+        int startIndex = pageSize * (pageNumber - 1);
+
+        List<Map> article = articleService.homeArticleHold(startIndex);
 
         JSONObject json = new JSONObject(true);
         json.put("article", article);
@@ -85,7 +126,7 @@ public class articleController
         if(!ObjectUtils.isEmpty(article))
         {
             //还需查看作者的id，查询作者的信息
-            user = userService.findbyArticleRef1(article.getRef1());
+            user = userService.findbyArticleRef1(article.getCreator());
         }
 
         Follower follower = new Follower();
@@ -96,7 +137,7 @@ public class articleController
             follower = userService.showFollowerOne(Integer.parseInt(m_id), user.getId());
             start = startService.showStartOne(Integer.parseInt(m_id), articleId, startType);
         }catch (Exception e){
-
+            System.out.println(e.getMessage());
         }
 
         //如果是草稿或者私密或者未审核只能自己看
@@ -128,6 +169,7 @@ public class articleController
     public Object saveArticle(@RequestBody JSONObject jreq)
     {
         Article article = jreq.getObject("article", Article.class);
+        article.setCreator(Integer.parseInt(SecurityUtils.getSubject().getPrincipal().toString()));
         article.setTimeCreate(new Date());
         article.setTimeUpdate(new Date());
 //        article.setAudit(false);  //这里测试不需要通过审核，到时候删除
@@ -152,6 +194,7 @@ public class articleController
     {
         Article article = jreq.getObject("article", Article.class);
         int userId = Integer.parseInt(SecurityUtils.getSubject().getPrincipal().toString());
+        article.setCreator(userId);
         //再次验证是否本人账号操作
         if(userId != article.getRef1())
         {
@@ -189,7 +232,7 @@ public class articleController
     public Object historyArticle(@RequestBody JSONObject jreq)
     {
         List articleIdList = jreq.getJSONArray("articleIdList");
-        List<Article> article = articleService.historyArticle(articleIdList);
+        List<Map> article = articleService.historyArticle(articleIdList);
         return new AfRestData(article);
     }
 

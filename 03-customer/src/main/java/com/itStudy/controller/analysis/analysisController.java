@@ -76,7 +76,7 @@ public class analysisController
         try{
             m_id = SecurityUtils.getSubject().getPrincipal().toString();
             follower = userService.showFollowerOne(Integer.parseInt(m_id), (Integer) map.get("createId"));
-            start = startService.showStartOne(Integer.parseInt(m_id), analysis.getId().intValue(), startType);
+            start = startService.showStartOne(Integer.parseInt(m_id), analysis.getId(), startType);
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -99,6 +99,51 @@ public class analysisController
         data.put("analysis", map);
         data.put("follower", follower);
         data.put("start", start.get("start"));
+        return new AfRestData(data);
+    }
+
+    //搜索问题
+    @PostMapping("/searchAnalysis.do")
+    public Object searchAnalysis(@RequestBody JSONObject jreq) throws Exception
+    {
+        int pageNumber = 1;
+        String searchContent = null;
+        int cat1 = 0;
+        try
+        {
+            pageNumber = jreq.getInteger("pageNumber");
+            searchContent = jreq.getString("searchContent");
+        }catch (Exception e)
+        {
+            return new AfRestError("没有页码");
+        }
+        try{
+            if(searchContent.equals(null) && searchContent.length()<1)
+            {
+                return new AfRestError("搜索内容不能为空");
+            }
+        }catch (Exception e)
+        {
+            return new AfRestError("搜索内容不能为空");
+        }
+
+
+        //总数据量
+        int totalitems = analysisService.searchAnalysisCount(searchContent);
+
+        //一页显示的数据量
+        int pageSize = 10;
+        //总页数
+        int pageCount = totalitems / pageSize;
+        if (totalitems % pageSize != 0) pageCount += 1;
+        //查询开始的页数
+        int startIndex = pageSize * (pageNumber - 1);
+
+        List<Map> analysisList = analysisService.searchAnalysis(searchContent, startIndex);
+        JSONObject data = new JSONObject(true);
+        data.put("analysisList", analysisList);
+        data.put("pageCount", pageCount);
+        data.put("totalitems", totalitems);
         return new AfRestData(data);
     }
 

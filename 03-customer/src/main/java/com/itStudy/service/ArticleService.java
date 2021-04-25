@@ -26,7 +26,7 @@ public interface ArticleService
     int homeArticleHoldCount();
 
     //用户查看某篇文章
-    Article showOneArticle(int id, int cat1);
+    Article showOneArticle(Long id, int cat1);
 
     //查看历史文章
     List<Map> historyArticle(List articleIdList);
@@ -47,9 +47,24 @@ public interface ArticleService
     int articleUpdateDelete(int userId, int articleId, int ref1);
 
     //修改文章的权限校验
-    int articleUpdateAuthority(int userId, int articleId, int ref1);
+    int articleUpdateAuthority(int userId, Long articleId, Long ref1);
 
     //修改文章收藏等
-    int articleUpdateInt(int articleId, String type, int operating);
+    int articleUpdateInt(Long articleId, String type, int operating);
+
+    //评论数+1
+    int articleReplyAdd(Long articleId, int numReply);
+
+    //查看评论数量
+    int ArticleReplyCount(Long articleId);
+
+    //查看评论
+    List<Map> ArticleShowReply(Long articleId, int startIndex);
+
+    //查看搜索文章的数目
+    int searchArticleCount(String searchContent);
+
+    //查看搜索的文章
+    List<Map> searchArticle(String searchContent, int startIndex);
 
 }

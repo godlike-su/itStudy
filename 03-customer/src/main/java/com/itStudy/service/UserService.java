@@ -3,6 +3,9 @@ package com.itStudy.service;
 import com.itStudy.entity.Follower;
 import com.itStudy.entity.User;
 
+import java.util.List;
+import java.util.Map;
+
 public interface UserService
 {
     //根据名查询一个用户
@@ -32,4 +35,10 @@ public interface UserService
 
     //修改密码
     int updatePassword(int id, String password);
+
+    //查看搜索用户的数量
+    int searchUserCount(String searchContent);
+
+    //查看搜索出来的用户
+    List<Map> searchUser(String searchContent, int startIndex, int pageSize);
 }

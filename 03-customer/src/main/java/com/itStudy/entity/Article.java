@@ -17,15 +17,15 @@ public class Article
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY,generator = "JDBC")
-	private Integer id ; 
+	private Long id ;
 	private Integer creator ;
 	private String title ; 
 	private String text ; 
 	private String content ; 
 	private Integer cat1 ; 
 	private Integer cat2 ; 
-	private Integer ref1 ; 
-	private Integer ref2 ;
+	private Long ref1 ;
+	private Long ref2 ;
 	private Date timeCreate ;
 	private Date timeUpdate ; 
 	private Byte niceFlag ; 

@@ -19,7 +19,7 @@ public class StartServiceImpl implements StartService
     private StartDao startDao;
 
     @Override
-    public Map showStartOne(int userId, int aId, int startType)
+    public Map showStartOne(int userId, Long aId, int startType)
     {
         Example example = new Example(Start.class);
         Example.Criteria criteria = example.createCriteria();
@@ -32,7 +32,7 @@ public class StartServiceImpl implements StartService
     }
 
     @Override
-    public int insertStart(int userId, int aId, int startType)
+    public int insertStart(int userId, Long aId, int startType)
     {
         Start start = new Start();
         start.setUserId(userId);
@@ -43,7 +43,7 @@ public class StartServiceImpl implements StartService
     }
 
     @Override
-    public int deletStart(int userId, int aId, int startType)
+    public int deletStart(int userId, Long aId, int startType)
     {
         Example example = new Example(Start.class);
         Example.Criteria criteria = example.createCriteria();

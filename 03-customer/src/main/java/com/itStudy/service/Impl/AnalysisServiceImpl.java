@@ -138,7 +138,7 @@ public class AnalysisServiceImpl implements AnalysisService
     }
 
     @Override
-    public int analysisUpdateStart(int analysisId, String type, int operating)
+    public int analysisUpdateStart(Long analysisId, String type, int operating)
     {
         int i = 0;
         //等于0说明要执行减操作
@@ -169,6 +169,26 @@ public class AnalysisServiceImpl implements AnalysisService
         criteria.andEqualTo("id", analysisId);
         criteria.andEqualTo("creator", userId);
         return analysisDao.updateByExampleSelective(analysis, example);
+    }
+
+    @Override
+    public int searchAnalysisCount(String searchContent)
+    {
+        Example example = new Example(Analysis.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("delFlag", 0);     //不是删除文章
+        criteria.andEqualTo("ref1", 0);     //为主贴
+        criteria.andEqualTo("audit", 0);     //
+        criteria.andEqualTo("draft", 0);     //
+        criteria.andLike("content", "%"+searchContent+"%");
+
+        return analysisDao.selectCountByExample(example);
+    }
+
+    @Override
+    public List<Map> searchAnalysis(String searchContent, int startIndex)
+    {
+        return analysisDao.searchAnalysis("%"+searchContent+"%", startIndex);
     }
 
 

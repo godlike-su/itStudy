@@ -42,7 +42,7 @@ public interface AnalysisService
     List<Map> otherhomeAnalysis(int userId, int startIndex);
 
     //修改收藏
-    int analysisUpdateStart(int analysisId, String type, int operating);
+    int analysisUpdateStart(Long analysisId, String type, int operating);
 
     //将问题加上删除标签
     int analysisUpdateDelete(Long analysisId,int userId);
@@ -50,6 +50,11 @@ public interface AnalysisService
 
     //查看自己的收藏问题
 //    List<Map> myStartAnalysisList(int myId, int startIndex);
+
+    //查看搜索问题的数量
+    int searchAnalysisCount(String searchContent);
+
+    List<Map> searchAnalysis(String searchContent, int startIndex);
 
 
 }

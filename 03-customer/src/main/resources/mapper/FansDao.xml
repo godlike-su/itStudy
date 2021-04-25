@@ -13,6 +13,7 @@
         SELECT f.m_id, f.`o_id`, f.`eachOther`, u.name, u.`thumb` FROM fans f
         LEFT JOIN `user` u ON f.`o_id` = u.`id`
         WHERE m_id = #{id}
+        LIMIT #{startIndex}, #{pageSize}
     </select>
 
     <update id="SetEachother">

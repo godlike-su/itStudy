@@ -19,7 +19,23 @@
         audit = 0 AND
         form = 0 AND
         delFlag = 0
-        ORDER BY numStart DESC, id DESC
+        ORDER BY topFlag DESC, numStart DESC, numReply DESC, id DESC
+        LIMIT #{startIndex}, 10
+    </select>
+
+    <select id="homeArticleHold" parameterType="Integer" resultType="hashmap">
+        SELECT a.id, ref1, a.creator, title, a.timeUpdate, `text`, numReply,
+        numLike, a.numStart, numStart, `type`, u.`name`
+        FROM article a
+        LEFT JOIN `user` u
+        ON a.`creator` = u.`id`
+        WHERE
+        ref2 = 0 AND
+        draft = 0 AND
+        audit = 0 AND
+        form = 0 AND
+        delFlag = 0
+        ORDER BY topFlag DESC, numStart DESC, numReply DESC, id DESC
         LIMIT #{startIndex}, 10
     </select>
 
@@ -46,6 +62,7 @@
 
     <select id="myhomeArticle" parameterType="Integer" resultType="hashmap">
         SELECT a.id, ref1, a.creator, title, a.timeUpdate, `text`, numReply,
+        a.draft, a.`form`, a.`audit`,
         numLike, a.numStart, numStart, `type`, u.`name`
         FROM article a
         LEFT JOIN `user` u
@@ -58,6 +75,24 @@
         LIMIT #{startIndex}, 10
     </select>
 
+    <select id="otherHomeArticle" parameterType="Integer" resultType="hashmap">
+        SELECT a.id, ref1, a.creator, title, a.timeUpdate, `text`, numReply,
+        numLike, a.numStart, numStart, `type`, u.`name`
+        FROM article a
+        LEFT JOIN `user` u
+        ON a.`creator` = u.`id`
+        WHERE
+        a.creator = #{userId} AND
+        ref2 = 0 AND
+        draft = 0 AND
+        audit = 0 AND
+        form = 0 AND
+        delFlag = 0
+
+        ORDER BY id DESC
+        LIMIT #{startIndex}, 10
+    </select>
+
     <update id="articleUpdateStartAdd">
         UPDATE article SET numStart = numStart + 1
         WHERE id = #{articleId}
@@ -67,6 +102,40 @@
         UPDATE article SET numStart = numStart - 1
         WHERE id = #{articleId}
     </update>
+
+    <select id="ArticleShowReply" resultType="hashmap">
+        SELECT a.id, ref1, a.creator, a.content, a.timeUpdate, `text`, numReply, a.`audit`,
+        numLike, a.numStart, numStart, `type`,
+        u.`name`, u.`thumb`, u.`id` AS userId
+        FROM article a
+        LEFT JOIN `user` u
+        ON a.`creator` = u.`id`
+        WHERE
+        a.ref2 = #{articleId}
+        AND delFlag = 0
+        AND audit = 0
+        ORDER BY id DESC
+        LIMIT #{startIndex}, 10
+    </select>
+
+    <select id="searchArticle" resultType="hashmap">
+        SELECT a.id, ref1, a.creator, title, a.timeUpdate, `text`, a.numReply,
+        a.numLike, a.numStart, `type`, u.`name`
+        FROM article a
+        LEFT JOIN `user` u
+        ON a.`creator` = u.`id`
+        WHERE
+        ref2 = 0
+        AND draft = 0
+        AND audit = 0
+        AND form = 0
+        AND delFlag = 0
+        AND a.`title` LIKE #{searchContent}
+        OR a.`text` LIKE #{searchContent}
+        ORDER BY topFlag DESC, numStart DESC, numReply DESC, id DESC
+        LIMIT #{startIndex}, 10
+    </select>
+
 
 
 

@@ -19,7 +19,7 @@ F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\entity\At
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\util\SaltUtil.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\dao\FollowerDao.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\listener\StreamReceiver.java
-F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\service\Impl\AnalysistServiceImpl.java
+F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\controller\analysis\analysisUpdateController.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\spring\AfRestData.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\config\ExceptionHandler.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\util\FileStore.java
@@ -29,8 +29,10 @@ F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\spring\Af
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\controller\user\myHomeController.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\util\MyUtil.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\entity\Navtab.java
+F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\controller\message\fansController.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\controller\article\articleUserController.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\service\Impl\ArticleServiceImpl.java
+F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\controller\noSecurityUser\otherHomeController.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\controller\webSocket\messageWebSocket.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\dao\ChatDao.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\service\StartService.java
@@ -44,6 +46,8 @@ F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\shiro\cac
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\controller\TestController.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\controller\LoginController.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\shiro\session\CustomSessionManager.java
+F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\service\Impl\AnalysisServiceImpl.java
+F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\controller\user\searchUserController.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\service\Impl\StartServiceImpl.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\dao\NavtabDao.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\service\Impl\NavtabServiceImpl.java
@@ -54,10 +58,10 @@ F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\dao\Artic
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\util\base64Decoder.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\entity\User.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\service\Impl\ChatServiceImpl.java
-F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\service\AnalysistService.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\controller\user\userInformationController.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\dao\UserPermsDao.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\entity\Perms.java
+F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\controller\article\articleReplyController.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\spring\AfRestView.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\controller\queue\test.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\controller\message\messageController.java
@@ -65,6 +69,7 @@ F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\service\I
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\shiro\cache\RedisCache.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\stream\StreamClient.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\service\ArticleService.java
+F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\controller\user\userPasswordController.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\dao\UserDao.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\entity\Fans.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\service\Impl\UserPhotoServiceImpl.java
@@ -73,6 +78,7 @@ F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\controlle
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\controller\user\userStartController.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\controller\article\articleUpdateController.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\service\UserService.java
+F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\service\AnalysisService.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\controller\article\articleController.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\controller\analysis\AnalysisImgController.java
 F:\java_porkwospace_IDEA\itStudy\03-customer\src\main\java\com\itStudy\controller\HomeController.java

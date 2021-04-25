@@ -13,7 +13,7 @@ public interface FansDao extends Mapper<Fans>
     int showInterestCount(int m_id);
 
     //查看粉丝
-    List<Map> showFans(int id);
+    List<Map> showFans(int id, int startIndex, int pageSize);
 
     //互相关注设置
     int SetEachother(int m_id, int o_id, boolean eachOther);

@@ -33,6 +33,16 @@
         SELECT id, name, thumb, vip  FROM user WHERE id = #{id}
     </select>
 
+    <select id="searchUser" resultType="hashmap">
+        SELECT u.`id`, u.`name`, u.`thumb`, u.`sex`, u.`phone`, u.`studentID`, f.`eachOther`
+        FROM `user` u
+        LEFT JOIN follower f ON u.`id` = f.`o_id`
+        GROUP BY studentID
+        HAVING
+        `name` LIKE #{param1}
+        OR `studentID` LIKE #{param1}
+        LIMIT #{startIndex}, #{pageSize}
+    </select>
 
 
 

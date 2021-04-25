@@ -34,7 +34,7 @@ public class StartController
     Object updateStart(@RequestBody JSONObject jreq) throws Exception
     {
         int userId = Integer.parseInt(SecurityUtils.getSubject().getPrincipal().toString());
-        int aId = jreq.getInteger("aId");
+        Long aId = jreq.getLong("aId");
         int startType = jreq.getInteger("startType");
         int start = jreq.getInteger("start");
         int i = 0;

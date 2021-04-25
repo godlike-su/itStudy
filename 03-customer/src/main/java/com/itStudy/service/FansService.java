@@ -8,5 +8,5 @@ public interface FansService
     //查看自己的粉丝数量
     int showInterestCount(int m_id);
 
-    List<Map> showFans(int id);
+    List<Map> showFans(int id, int startIndex, int pageSize);
 }

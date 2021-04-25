@@ -40,15 +40,7 @@ public class messageController
         return new AfRestData(map);
     }
 
-    //查看我的粉丝
-    @PostMapping("/showFans.do")
-    public Object showFans(@RequestBody JSONObject jreq)
-    {
-        //自己的id
-        int id = Integer.parseInt(SecurityUtils.getSubject().getPrincipal().toString());
-        List<Map> map = fansService.showFans(id);
-        return new AfRestData(map);
-    }
+
 
 
 }

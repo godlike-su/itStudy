@@ -76,8 +76,9 @@ public class chatController
         List<Chat> chatList = chatService.chatShowRecordList(sendUserId, receiveUserId, startIndex, pageSize);
 
         Map map = new HashMap();
-        map.put("pageCount", count);
+        map.put("pageCount", pageCount);
         map.put("chatList", chatList);
+        map.put("pageNumber", pageNumber);
         return new AfRestData(map);
     }
 }

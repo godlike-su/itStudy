@@ -4,6 +4,9 @@ import com.itStudy.entity.User;
 import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.common.Mapper;
 
+import java.util.List;
+import java.util.Map;
+
 @Repository
 public interface UserDao extends Mapper<User>
 {
@@ -14,4 +17,7 @@ public interface UserDao extends Mapper<User>
     User findPermsByUserId(int id);
 
     User findbyArticleRef1(int id);
+
+    //查看搜索出来的用户
+    List<Map> searchUser(String searchContent, int startIndex, int pageSize);
 }

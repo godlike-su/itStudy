@@ -24,7 +24,7 @@ public class Start
 	@Id
 	private Integer userId ;
 	@Id
-	private Integer aId ;
+	private Long aId ;
 	private Integer startType ;
 	private Date createTime;
 }

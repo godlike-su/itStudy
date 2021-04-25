@@ -1,7 +1,11 @@
 server:
   port: 8081   # 端口
+#  context-path: /itStudyClient
   error:
     include-exception: true
+  servlet:
+#    context-path: /itStudyClient
+    context-path: /
 
 
 #指定Eureka服务地址

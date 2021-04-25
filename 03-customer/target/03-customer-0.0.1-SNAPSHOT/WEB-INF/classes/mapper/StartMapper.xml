@@ -5,16 +5,36 @@
 
 <mapper namespace="com.itStudy.dao.StartDao">
 
-    <select id="homeStart" resultType="com.itStudy.entity.Article">
-        SELECT id, ref1, creator, title, timeUpdate, text, numReply, numLike, audit,
-            draft,  type, cat1, numStart
+    <select id="homeStart" resultType="hashmap">
+        SELECT a.id, ref1, creator, title, a.timeUpdate, `text`, numReply, numLike, audit,
+            draft,  `type`, cat1, numStart, u.name
         FROM `start` s
         LEFT JOIN article a ON a.`id` = s.`aId`
+        LEFT JOIN `user` u ON s.`userId` = u.`id`
         WHERE
-        s.`userId` = #{userId}
+        s.startType = 0
+        AND s.`userId` = #{userId}
+        AND a.draft = 0
+        AND a.audit = 0
         ORDER BY s.`createTime` DESC
         LIMIT #{startIndex}, 10
     </select>
+
+    <select id="myStartAnalysisList" resultType="hashmap">
+        SELECT a.id, ref1, creator, title, content, a.timeUpdate, numReply, numLike, audit,
+            draft, cat1, numStart, a.img1, a.img2, a.img3, a.storePath, u.name, u.thumb
+        FROM `start` s
+        LEFT JOIN analysis a ON a.`id` = s.`aId`
+        LEFT JOIN `user` u ON s.`userId` = u.`id`
+        WHERE
+        s.startType = 1 AND
+        s.`userId` = #{userId} AND
+        a.draft = 0 AND
+        a.audit = 0
+        ORDER BY s.`createTime` DESC
+        LIMIT #{startIndex}, 10
+    </select>
+
 
 
 

@@ -116,7 +116,7 @@ public class articleController
     @PostMapping("/showOneArticle.do")
     public Object showOneArticle(@RequestBody JSONObject jreq)
     {
-        int articleId = jreq.getInteger("articleId");
+        Long articleId = jreq.getLong("articleId");
 //        int typeId = jreq.getInteger("typeId");
 //        String type = jreq.getString("type");
         int startType= jreq.getInteger("startType");
@@ -172,50 +172,11 @@ public class articleController
         article.setCreator(Integer.parseInt(SecurityUtils.getSubject().getPrincipal().toString()));
         article.setTimeCreate(new Date());
         article.setTimeUpdate(new Date());
-//        article.setAudit(false);  //这里测试不需要通过审核，到时候删除
+//        article.setAudit(false);  //这里测试不需要通过审核
 //        article.setDraft((byte) 0); //上传就不设置为草稿了
         try
         {
             articleService.insertSelective(article);
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-            return new AfRestError(e.getMessage());
-        }
-
-
-        return new AfRestData(article.getId());
-    }
-
-    //修改文章
-    @PostMapping("/article/updateArticle.do")
-    public Object updateArticle(@RequestBody JSONObject jreq)
-    {
-        Article article = jreq.getObject("article", Article.class);
-        int userId = Integer.parseInt(SecurityUtils.getSubject().getPrincipal().toString());
-        article.setCreator(userId);
-        //再次验证是否本人账号操作
-        if(userId != article.getRef1())
-        {
-            return new AfRestError("修改错误，非本人文章！");
-        }
-        else
-        {
-            int i = articleService.articleUpdateAuthority(userId, article.getId(), article.getRef1());
-            if(i!=1)
-            {
-                return new AfRestError("修改错误，非本人文章！");
-            }
-        }
-
-        article.setTimeCreate(new Date());
-        article.setTimeUpdate(new Date());
-//        article.setAudit(false);  //这里测试不需要通过审核，到时候删除
-//        article.setDraft((byte) 0); //上传就不设置为草稿了
-        try
-        {
-            articleService.updateArticle(article);
         }
         catch (Exception e)
         {
@@ -234,6 +195,45 @@ public class articleController
         List articleIdList = jreq.getJSONArray("articleIdList");
         List<Map> article = articleService.historyArticle(articleIdList);
         return new AfRestData(article);
+    }
+
+    //搜索文章
+    @PostMapping("/searchArticle.do")
+    public Object searchArticle(@RequestBody JSONObject jreq) throws Exception
+    {
+        int pageNumber = 1;
+        String searchContent = null;
+        try
+        {
+            pageNumber = jreq.getInteger("pageNumber");
+            searchContent = jreq.getString("searchContent").trim();
+        }catch (Exception e)
+        {
+            return new AfRestError("找不到页码了,请刷新重试！");
+        }
+
+        if(searchContent.equals(null))
+        {
+            return new AfRestError("搜索内容不能为空");
+        }
+
+        int count = articleService.searchArticleCount(searchContent);
+
+        //一页显示的数据量
+        int pageSize = 10;
+        //总页数
+        int pageCount = count / pageSize;
+        if (count % pageSize != 0) pageCount += 1;
+        //查询开始的页数
+        int startIndex = pageSize * (pageNumber - 1);
+
+        List<Map> article = articleService.searchArticle(searchContent, startIndex);
+
+        JSONObject json = new JSONObject(true);
+        json.put("article", article);
+        json.put("pageCount", pageCount);
+
+        return new AfRestData(json);
     }
 
 

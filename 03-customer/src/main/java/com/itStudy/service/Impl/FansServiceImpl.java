@@ -21,8 +21,8 @@ public class FansServiceImpl implements FansService
     }
 
     @Override
-    public List<Map> showFans(int id)
+    public List<Map> showFans(int id, int startIndex, int pageSize)
     {
-        return fansDao.showFans(id);
+        return fansDao.showFans(id, startIndex, pageSize);
     }
 }

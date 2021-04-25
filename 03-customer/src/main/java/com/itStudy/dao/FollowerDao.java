@@ -11,5 +11,5 @@ import java.util.Map;
 public interface FollowerDao extends Mapper<Follower>
 {
     //查看我的关注列表
-    List<Map> showFollowers(int id);
+    List<Map> showFollowers(int id, int startIndex, int pageSize);
 }

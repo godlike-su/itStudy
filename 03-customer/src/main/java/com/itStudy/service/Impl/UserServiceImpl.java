@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService
@@ -194,5 +196,23 @@ public class UserServiceImpl implements UserService
         user.setId(id);
         user.setPassword(password);
         return userDao.updateByPrimaryKeySelective(user);
+    }
+
+    @Override
+    public int searchUserCount(String searchContent)
+    {
+        //查询总数的筛选条件
+        Example example = new Example(User.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andLike("name", "%"+searchContent+"%");
+        criteria.orLike("studentID", "%"+searchContent+"%");
+
+        return userDao.selectCountByExample(example);
+    }
+
+    @Override
+    public List<Map> searchUser(String searchContent, int startIndex, int pageSize)
+    {
+        return userDao.searchUser("%"+searchContent+"%", startIndex, pageSize);
     }
 }

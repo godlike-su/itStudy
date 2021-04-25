@@ -67,7 +67,7 @@ public class LoginController
         else
         {
             String state = (String) getRedisTemplate().opsForValue().get(verifyToken);
-            if(state.length() <= 0)
+            if(state.equals(null))
             {
                 return new AfRestError("验证码已过期，前刷新重试!");
             }
@@ -109,6 +109,7 @@ public class LoginController
             object.put("id", user.getId());
             object.put("sex", user.getSex());
             object.put("thumb", user.getThumb());
+            object.put("studentID", user.getStudentID());
 
 
             //构造返回结果
@@ -130,38 +131,37 @@ public class LoginController
     public Object register(@RequestBody JSONObject jreq) throws Exception
     {
         //安全监测，验证码监测
-//        String verifyToken = jreq.getString("verifyToken").trim();
-//        String verify = jreq.getString("verify").trim();
-//        if(verifyToken.length() <= 0)
-//        {
-//            return new AfRestError("验证码出错，请刷新页面后重试!");
-//        }
-//        if(verify.length() <= 0)
-//        {
-//            return new AfRestError("验证码不能为空!");
-//        }
-//        else if(verify.length() != 4)
-//        {
-//            return new AfRestError("验证码错误!");
-//        }
-//        else
-//        {
-//            String state = (String) getRedisTemplate().opsForValue().get("verifyToken");
-//            if(state.length() <= 0)
-//            {
-//                return new AfRestError("验证码已过期，前刷新重试!");
-//            }
-//            else if(!state.toUpperCase().equals(verify.toUpperCase()))
-//            {
-//                return new AfRestError("验证码错误!");
-//            }
-//            else if(state.toUpperCase().equals(verify.toUpperCase()))
-//            {
-//                //成功，删除redis的数据
-//                getRedisTemplate().opsForValue().getOperations().delete(verifyToken);
-//            }
-//        }
-
+        String verifyToken = jreq.getString("verifyToken").trim();
+        String verify = jreq.getString("verify").trim();
+        if(verifyToken.length() <= 0)
+        {
+            return new AfRestError("验证码出错，请刷新页面后重试!");
+        }
+        else if(verify.length() <= 0)
+        {
+            return new AfRestError("验证码不能为空!");
+        }
+        else if(verify.length() != 4)
+        {
+            return new AfRestError("验证码错误!");
+        }
+        else
+        {
+            String state = (String) getRedisTemplate().opsForValue().get(verifyToken);
+            if(state.equals(null))
+            {
+                return new AfRestError("验证码已过期，前刷新重试!");
+            }
+            else if(!state.toUpperCase().equals(verify.toUpperCase()))
+            {
+                return new AfRestError("验证码错误!");
+            }
+            else if(state.toUpperCase().equals(verify.toUpperCase()))
+            {
+                //成功，删除redis的数据
+                getRedisTemplate().opsForValue().getOperations().delete(verifyToken);
+            }
+        }
 
         User user = new User();
         int studentID = 0;
@@ -191,11 +191,11 @@ public class LoginController
         {
             return new AfRestError("账号不能为空！");
         }
-        if (user.getName().length() < 1)
+        else if (user.getName().length() < 1)
         {
             return new AfRestError("昵称不能为空！");
         }
-        if (user.getPassword().length() > 0)
+        else if (user.getPassword().length() > 0)
         {
             //明文密码进行md5+salt+hash散列
             String salt = SaltUtil.getSalt(8);
@@ -256,6 +256,8 @@ public class LoginController
         response.setContentType("image/png");
         VerifyCodeUtils.outputImage(220,60,os,code);
     }
+
+
     private RedisTemplate getRedisTemplate(){
         RedisTemplate redisTemplate = (RedisTemplate) ApplicationContextUtils.getBean("redisTemplate");
         redisTemplate.setKeySerializer(new StringRedisSerializer());

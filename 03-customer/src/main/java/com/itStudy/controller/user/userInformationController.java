@@ -5,6 +5,7 @@ import com.itStudy.entity.User;
 import com.itStudy.service.FansService;
 import com.itStudy.service.UserService;
 import com.itStudy.spring.AfRestData;
+import com.itStudy.spring.AfRestError;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -57,20 +58,25 @@ public class userInformationController
         String type = jreq.getString("type");
         int i = 0;
 
-        if ("birthday".equals(type))
+        try
         {
-            Date value = jreq.getDate("value");
-            i = userService.setInformation(id, type, value);
-        } else if ("sex".equals(type))
+            if ("birthday".equals(type))
+            {
+                Date value = jreq.getDate("value");
+                i = userService.setInformation(id, type, value);
+            } else if ("sex".equals(type))
+            {
+                Boolean value = jreq.getBoolean("value");
+                i = userService.setInformation(id, type, value);
+            } else
+            {
+                String value = jreq.getString("value");
+                i = userService.setInformation(id, type, value);
+            }
+        }catch (Exception e)
         {
-            Boolean value = jreq.getBoolean("value");
-            i = userService.setInformation(id, type, value);
-        } else
-        {
-            String value = jreq.getString("value");
-            i = userService.setInformation(id, type, value);
+            return new AfRestError("该信息已被注册!");
         }
-
 
         return new AfRestData(i);
     }

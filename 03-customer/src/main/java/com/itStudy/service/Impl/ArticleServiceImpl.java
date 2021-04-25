@@ -74,7 +74,7 @@ public class ArticleServiceImpl implements ArticleService
     }
 
     @Override
-    public Article showOneArticle(int id, int cat1)
+    public Article showOneArticle(Long id, int cat1)
     {
         Example example = new Example(Article.class);
         Example.Criteria criteria = example.createCriteria();
@@ -146,7 +146,7 @@ public class ArticleServiceImpl implements ArticleService
     }
 
     @Override
-    public int articleUpdateAuthority(int userId, int articleId, int ref1)
+    public int articleUpdateAuthority(int userId, Long articleId, Long ref1)
     {
         Example example = new Example(Article.class);
         Example.Criteria criteria = example.createCriteria();
@@ -156,7 +156,7 @@ public class ArticleServiceImpl implements ArticleService
     }
 
     @Override
-    public int articleUpdateInt(int articleId, String type, int operating)
+    public int articleUpdateInt(Long articleId, String type, int operating)
     {
         int i = 0;
         //等于0说明要执行减操作
@@ -175,6 +175,57 @@ public class ArticleServiceImpl implements ArticleService
             return 0;
         }
         return i;
+    }
+
+    @Override
+    public int articleReplyAdd(Long articleId, int numReply)
+    {
+        Article article = new Article();
+        article.setId(articleId);
+        article.setNumReply(numReply + 1);
+        return articleDao.updateByPrimaryKeySelective(article);
+    }
+
+    @Override
+    public int ArticleReplyCount(Long articleId)
+    {
+        //查询总数的筛选条件
+        Example example = new Example(Article.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("ref2", articleId);    //不是评论
+        criteria.andEqualTo("audit", 0);    //通过审核
+        criteria.andEqualTo("delFlag", 0);     //不是删除文章
+
+        return articleDao.selectCountByExample(example);
+    }
+
+    @Override
+    public List<Map> ArticleShowReply(Long articleId, int startIndex)
+    {
+        return articleDao.ArticleShowReply(articleId, startIndex);
+    }
+
+    @Override
+    public int searchArticleCount(String searchContent)
+    {
+        //查询总数的筛选条件
+        Example example = new Example(Article.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("ref2", 0);    //不是评论
+        criteria.andEqualTo("draft", 0);  //不为草稿
+        criteria.andEqualTo("audit", 0);    //通过审核
+        criteria.andEqualTo("form", 0);     //发布为公开模式
+        criteria.andEqualTo("delFlag", 0);     //不是删除文章
+        criteria.andLike("title", "%"+searchContent+"%");
+        criteria.orLike("text", "%"+searchContent+"%");
+
+        return articleDao.selectCountByExample(example);
+    }
+
+    @Override
+    public List<Map> searchArticle(String searchContent, int startIndex)
+    {
+        return articleDao.searchArticle("%"+searchContent+"%", startIndex);
     }
 
 

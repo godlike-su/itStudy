@@ -6,11 +6,11 @@ import java.util.Map;
 public interface StartService
 {
     //查看是否有收藏该文章等
-    Map showStartOne(int userId, int aId, int startType);
+    Map showStartOne(int userId, Long aId, int startType);
 
-    int insertStart(int userId, int aId, int startType);
+    int insertStart(int userId, Long aId, int startType);
 
-    int deletStart(int userId, int aId, int startType);
+    int deletStart(int userId, Long aId, int startType);
 
     int startCount(int userId, int startType);
 

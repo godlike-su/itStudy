@@ -22,11 +22,17 @@ public interface ArticleDao extends Mapper<Article>
     List<Map> myhomeArticle(int myId, int startIndex, int cat1);
 
     //修改int类型的数据 增加
-    int articleUpdateStartAdd(int articleId, String type, int operating);
+    int articleUpdateStartAdd(Long articleId, String type, int operating);
 
     //修改int类型的数据 减
-    int articleUpdateStartDec(int articleId, String type, int operating);
+    int articleUpdateStartDec(Long articleId, String type, int operating);
 
     //查看他人首页文章简略加载
     List<Map> otherHomeArticle(int userId, int startIndex);
+
+    //查看评论
+    List<Map> ArticleShowReply(Long articleId, int startIndex);
+
+    //查看搜索的文章
+    List<Map> searchArticle(String searchContent, int startIndex);
 }

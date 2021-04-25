@@ -8,7 +8,7 @@
     <select id="homeAnalysis" parameterType="Integer" resultType="hashmap">
         SELECT u.id AS createId, u.name, u.thumb, a.id,
         a.content, a.cat1, a.timeUpdate, a.storePath,
-        a.img1, a.img2, a.img3, a.`numLike`, a.`numReply`
+        a.img1, a.img2, a.img3, a.`numLike`, a.`numReply`, a.numStart
         FROM analysis a
         LEFT JOIN user u ON a.`creator` = u.`id`
         WHERE
@@ -19,7 +19,7 @@
         <if test="cat1!=0">
             AND a.`cat1` = #{cat1}
         </if>
-        ORDER BY timeUpdate DESC
+        ORDER BY numStart DESC, numLike DESC, timeUpdate DESC
         LIMIT #{startIndex}, 10
     </select>
 
@@ -27,14 +27,13 @@
     <select id="findAnalysisById" parameterType="long" resultType="hashmap">
         SELECT u.id AS createId, u.name, u.thumb, a.id, a.content,
             a.cat1, a.timeUpdate, a.storePath, a.img1, a.img2, a.img3,
-            a.numReply, a.numLike, a.draft, a.audit
+            a.numReply, a.numLike, a.draft, a.audit, a.numStart
         FROM analysis a
         LEFT JOIN user u ON a.`creator` = u.`id`
         WHERE
-        a.`delFlag` = 0
 --         AND a.`draft` = 0
 --         AND a.`audit` = 0
-        AND a.`ref1` = 0
+        a.`ref1` = 0
         AND a.`delFlag` = 0
         AND a.`id` = #{id}
     </select>
@@ -81,7 +80,7 @@
     <select id="myhomeAnalysis" parameterType="Integer" resultType="hashmap">
         SELECT u.id AS createId, u.name, u.thumb, a.id,
         a.content, a.cat1, a.timeUpdate, a.storePath, a.draft, a.audit,
-        a.img1, a.img2, a.img3, a.`numLike`, a.`numReply`
+        a.img1, a.img2, a.img3, a.`numLike`, a.`numReply`, a.numStart
         FROM analysis a
         LEFT JOIN user u ON a.`creator` = u.`id`
         WHERE
@@ -91,6 +90,52 @@
         ORDER BY draft DESC, audit DESC,timeUpdate DESC
         LIMIT #{startIndex}, 10
     </select>
+
+
+    <select id="otherhomeAnalysis" parameterType="Integer" resultType="hashmap">
+        SELECT u.id AS createId, u.name, u.thumb, a.id,
+        a.content, a.cat1, a.timeUpdate, a.storePath, a.draft, a.audit,
+        a.img1, a.img2, a.img3, a.`numLike`, a.`numReply`, a.numStart
+        FROM analysis a
+        LEFT JOIN user u ON a.`creator` = u.`id`
+        WHERE
+        a.`delFlag` = 0
+        AND a.creator = #{userId}
+        AND a.`ref1` = 0
+        AND a.`draft` = 0
+        AND a.`audit` = 0
+        ORDER BY draft DESC, audit DESC,timeUpdate DESC
+        LIMIT #{startIndex}, 10
+    </select>
+
+    <update id="analysisUpdateStartAdd">
+        UPDATE analysis SET numStart = numStart + 1
+        WHERE id = #{analysisId}
+    </update>
+
+    <update id="analysisUpdateStartDec">
+        UPDATE analysis SET numStart = numStart - 1
+        WHERE id = #{analysisId}
+    </update>
+
+
+    <select id="searchAnalysis" resultType="hashmap">
+        SELECT u.id AS createId, u.name, u.thumb, a.id,
+        a.content, a.cat1, a.timeUpdate, a.storePath,
+        a.img1, a.img2, a.img3, a.`numLike`, a.`numReply`, a.numStart
+        FROM analysis a
+        LEFT JOIN user u ON a.`creator` = u.`id`
+        WHERE
+        a.`delFlag` = 0
+        AND a.`draft` = 0
+        AND a.`ref1` = 0
+        AND a.`audit` = 0
+        AND a.`content` LIKE #{param1}
+        ORDER BY numStart DESC, numLike DESC, timeUpdate DESC
+        LIMIT #{startIndex}, 10
+    </select>
+
+
 
 
 

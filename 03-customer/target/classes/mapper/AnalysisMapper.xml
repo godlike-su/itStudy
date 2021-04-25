@@ -119,6 +119,21 @@
     </update>
 
 
+    <select id="searchAnalysis" resultType="hashmap">
+        SELECT u.id AS createId, u.name, u.thumb, a.id,
+        a.content, a.cat1, a.timeUpdate, a.storePath,
+        a.img1, a.img2, a.img3, a.`numLike`, a.`numReply`, a.numStart
+        FROM analysis a
+        LEFT JOIN user u ON a.`creator` = u.`id`
+        WHERE
+        a.`delFlag` = 0
+        AND a.`draft` = 0
+        AND a.`ref1` = 0
+        AND a.`audit` = 0
+        AND a.`content` LIKE #{param1}
+        ORDER BY numStart DESC, numLike DESC, timeUpdate DESC
+        LIMIT #{startIndex}, 10
+    </select>
 
 
 

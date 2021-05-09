@@ -228,5 +228,22 @@ public class ArticleServiceImpl implements ArticleService
         return articleDao.searchArticle("%"+searchContent+"%", startIndex);
     }
 
+    @Override
+    public List<Article> showDelMessage()
+    {
+        Example example = new Example(Article.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("delFlag", (byte) 1);    //不是评论
+        return articleDao.selectByExample(example);
+    }
+
+    @Override
+    public int deleteArticle(Long id)
+    {
+        Article article = new Article();
+        article.setId(id);
+        return articleDao.deleteByPrimaryKey(article);
+    }
+
 
 }

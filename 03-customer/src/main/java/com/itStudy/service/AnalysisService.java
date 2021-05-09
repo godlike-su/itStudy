@@ -1,6 +1,7 @@
 package com.itStudy.service;
 
 import com.itStudy.entity.Analysis;
+import com.itStudy.entity.Article;
 import com.itStudy.entity.User;
 
 import java.util.Date;
@@ -55,6 +56,12 @@ public interface AnalysisService
     int searchAnalysisCount(String searchContent);
 
     List<Map> searchAnalysis(String searchContent, int startIndex);
+
+    //查看删除的问题
+    List<Analysis> showDelAnalysis();
+
+    //删除问题
+    int deleteAnalysis(Long id);
 
 
 }

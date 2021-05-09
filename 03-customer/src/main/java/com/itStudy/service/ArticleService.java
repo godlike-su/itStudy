@@ -67,4 +67,10 @@ public interface ArticleService
     //查看搜索的文章
     List<Map> searchArticle(String searchContent, int startIndex);
 
+    //查看删除的文章
+    List<Article> showDelMessage();
+
+    //删除文章
+    int deleteArticle(Long id);
+
 }

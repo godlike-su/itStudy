@@ -16,36 +16,36 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
 <!--            war打包不能注释-->
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <groupId>org.springframework.boot</groupId>-->
-<!--                    <artifactId>spring-boot-starter-tomcat</artifactId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!--  添加对servlet包的依赖 war打包不能注释-->
         <!-- websocker  war打包不能注释-->
 
-<!--        <dependency>-->
-<!--            <groupId>javax.servlet</groupId>-->
-<!--            <artifactId>javax.servlet-api</artifactId>-->
-<!--            <version>3.1.0</version>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>javax.websocket</groupId>-->
-<!--            <artifactId>javax.websocket-api</artifactId>-->
-<!--            <version>1.1</version>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>javax.websocket</groupId>
+            <artifactId>javax.websocket-api</artifactId>
+            <version>1.1</version>
+            <scope>provided</scope>
+        </dependency>
 
         <!-- WebSocket war打包需要注释-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-websocket</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-websocket</artifactId>-->
+<!--        </dependency>-->
 
         <!-- eureka-customer -->
         <dependency>
@@ -180,14 +180,6 @@
 <!--        </dependency>-->
 
 
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-websocket -->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-websocket</artifactId>-->
-<!--            <version>1.5.14.RELEASE</version>-->
-<!--        </dependency>-->
-
-
         <!--        &lt;!&ndash; pagehelper分页 &ndash;&gt;-->
 <!--        <dependency>-->
 <!--            <groupId>com.github.pagehelper</groupId>-->
@@ -200,18 +192,12 @@
 <!--            <artifactId>commons-io</artifactId>-->
 <!--            <version>2.4</version>-->
 <!--        </dependency>-->
-<!--        &lt;!&ndash; Thumbnailator图片操作 &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>net.coobird</groupId>-->
-<!--            <artifactId>thumbnailator</artifactId>-->
-<!--            <version>0.4.8</version>-->
-<!--        </dependency>-->
 <!--        &lt;!&ndash; 添加 QQ登录依赖 &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>net.gplatform</groupId>-->
-<!--            <artifactId>Sdk4J</artifactId>-->
-<!--            <version>2.0</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>net.gplatform</groupId>
+            <artifactId>Sdk4J</artifactId>
+            <version>2.0</version>
+        </dependency>
 
         <!--热部署-->
 <!--        <dependency>-->

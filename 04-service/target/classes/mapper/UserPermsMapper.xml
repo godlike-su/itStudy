@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.itStudyService.dao.UserPermsDao">
+
+
+    <insert id="addUserPerms" parameterType="List">
+        INSERT INTO `user_perms` (`userId`, `permsId`) VALUES
+        <foreach item="item" collection="list" index="index"  separator="," >
+            (#{item.userId, jdbcType=NUMERIC}, #{item.permsId, jdbcType=NUMERIC})
+        </foreach>
+    </insert>
+
+    <delete id="deleteUserPermsByUserId">
+        delete from `user_perms` where `userId` = #{userId}
+    </delete>
+
+
+</mapper>

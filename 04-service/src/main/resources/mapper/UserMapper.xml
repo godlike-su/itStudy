@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.itStudyService.dao.UserDao">
+
+
+    <resultMap id="userMap" type="com.itStudyService.entity.User">
+        <id column="uid" property="id"></id>
+        <result column="name" property="name"></result>
+        <result column="studentID" property="studentID"></result>
+        <result column="role" property="role"></result>
+        <!--权限信息-->
+        <collection property="perms" javaType="list" ofType="com.itStudyService.entity.Perms">
+            <id column="permsid" property="id"></id>
+            <result column="permissions" property="permissions"></result>
+        </collection>
+    </resultMap>
+
+    <select id="findByUserStudentID" parameterType="String" resultType="com.itStudyService.entity.User">
+        SELECT id, name, salt, password, phone, qqid, sex, thumb, studentID, role
+        FROM user WHERE studentID = #{studentID}
+    </select>
+
+    <select id="findPermsByUserId" parameterType="integer" resultMap="userMap">
+        SELECT u.`id` uid,u.`name`, u.salt , u.role, u.studentID,
+        p.`id` permsid, p.`permissions` permissions
+        FROM user u LEFT JOIN user_perms up ON u.`id` = up.`userid`
+        LEFT JOIN perms p
+        ON up.`permsId` = p.`id`
+        WHERE u.`id`= #{id}
+    </select>
+
+    <select id="userHomeCount"  resultType="Integer">
+        SELECT count(*) FROM user
+    </select>
+
+    <select id="userHome"  resultType="com.itStudyService.entity.User">
+        SELECT * FROM user
+        ORDER BY id
+        LIMIT #{startIndex},#{pageSize}
+    </select>
+
+
+    <select id="authorityShow" parameterType="integer" resultMap="userMap">
+        SELECT u.`id` uid,u.`name`, u.salt , u.role, u.studentID,
+        p.`id` permsid, p.`permissions` permissions
+        FROM user u LEFT JOIN user_perms up ON u.`id` = up.`userid`
+        LEFT JOIN perms p
+        ON up.`permsId` = p.`id`
+        LIMIT #{startIndex},#{pageSize}
+    </select>
+
+
+
+
+</mapper>

@@ -22,7 +22,7 @@ public class NavtabServiceImpl implements NavtabService
     {
         Example example = new Example(Navtab.class);
         Example.Criteria criteria = example.createCriteria();
-        example.setOrderByClause("sort ASC");
+        example.setOrderByClause("sort DESC, id ASC");
         return navtabDao.selectByExample(example);
     }
 }

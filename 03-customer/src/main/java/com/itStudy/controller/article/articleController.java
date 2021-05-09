@@ -48,7 +48,7 @@ public class articleController
             pageNumber = jreq.getInteger("pageNumber");
         }catch (Exception e)
         {
-            return new AfRestData("");
+            return new AfRestError("检测不到文章数据，请刷新重试!");
         }
 
         //count：符合条件的记录一共有多少条
@@ -172,7 +172,7 @@ public class articleController
         article.setCreator(Integer.parseInt(SecurityUtils.getSubject().getPrincipal().toString()));
         article.setTimeCreate(new Date());
         article.setTimeUpdate(new Date());
-//        article.setAudit(false);  //这里测试不需要通过审核
+        article.setAudit((byte) 1);  //这里测试不需要通过审核
 //        article.setDraft((byte) 0); //上传就不设置为草稿了
         try
         {

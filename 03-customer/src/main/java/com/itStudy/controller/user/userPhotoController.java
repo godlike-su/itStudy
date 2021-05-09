@@ -8,6 +8,7 @@ import com.itStudy.spring.AfRestError;
 import com.itStudy.util.FileStore;
 import com.itStudy.util.Global;
 import com.itStudy.util.MyUtil;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import sun.misc.BASE64Decoder;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -40,9 +42,9 @@ public class userPhotoController
 
         if (base64Data != null && base64Data.length() > 0)
         {
-            if(size > 500000)
+            if(size > 3 * 1024 * 1024)
             {
-                return new AfRestError("传输失败，文件不能大于500k");
+                return new AfRestError("传输失败，文件不能大于2m喔!");
             }
 
             if(!type.split("/")[0].equals("image"))
@@ -74,11 +76,18 @@ public class userPhotoController
                 out.write(bytes);
                 out.flush();
                 out.close();
+                File tmpFile = new File(tmpFileurl);
+                if(size > 500 * 1024)
+                {
+                    Thumbnails.of(new File(tmpFileurl))
+                            .scale(0.5f)
+                            .toFile(new File(tmpFileurl));
+                }
 
 
                 User user = jreq.getObject("user", User.class);
 
-                File tmpFile = new File(tmpFileurl);
+
                 // 头像的正式URL
                 String url = userPhotoService.usePhoto(user, tmpFile, suffix);
 

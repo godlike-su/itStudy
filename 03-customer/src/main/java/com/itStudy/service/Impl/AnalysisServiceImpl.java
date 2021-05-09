@@ -2,6 +2,7 @@ package com.itStudy.service.Impl;
 
 import com.itStudy.dao.AnalysisDao;
 import com.itStudy.entity.Analysis;
+import com.itStudy.entity.Article;
 import com.itStudy.entity.User;
 import com.itStudy.service.AnalysisService;
 import lombok.extern.slf4j.Slf4j;
@@ -189,6 +190,23 @@ public class AnalysisServiceImpl implements AnalysisService
     public List<Map> searchAnalysis(String searchContent, int startIndex)
     {
         return analysisDao.searchAnalysis("%"+searchContent+"%", startIndex);
+    }
+
+    @Override
+    public List<Analysis> showDelAnalysis()
+    {
+        Example example = new Example(Article.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("delFlag", (byte) 1);    //不是评论
+        return analysisDao.selectByExample(example);
+    }
+
+    @Override
+    public int deleteAnalysis(Long id)
+    {
+        Analysis analysis = new Analysis();
+        analysis.setId(id);
+        return analysisDao.deleteByPrimaryKey(analysis);
     }
 
 

@@ -56,6 +56,7 @@ public class analysisAddController
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM/dd/");
         return sdf.format(new Date()) + MyUtil.guid2() + "/";
     }
+
     // 将临时文件存储到Store，并返回存储路径 (此处只存储文件名)
     private String moveTmpToStore(String storePath, String tmpName)
     {

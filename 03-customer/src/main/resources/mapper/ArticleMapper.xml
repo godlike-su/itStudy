@@ -8,7 +8,8 @@
 
     <select id="homeArticle" parameterType="Integer" resultType="hashmap">
         SELECT a.id, ref1, a.creator, title, a.timeUpdate, `text`, numReply,
-        numLike, a.numStart, numStart, `type`, u.`name`
+        numLike, a.numStart, numStart, `type`, u.`name`,
+        a.storePath, a.img1, a.img2, a.img3, a.topFlag
         FROM article a
         LEFT JOIN `user` u
         ON a.`creator` = u.`id`
@@ -34,6 +35,7 @@
         draft = 0 AND
         audit = 0 AND
         form = 0 AND
+        cat1 != 4 AND
         delFlag = 0
         ORDER BY topFlag DESC, numStart DESC, numReply DESC, id DESC
         LIMIT #{startIndex}, 10

@@ -66,7 +66,10 @@ public class userPasswordController
         {
             Subject subject = SecurityUtils.getSubject();
             subject.logout();
-            getRedisTemplate().delete(Global.getAuthenticationCache());
+            getRedisTemplate().opsForHash().delete(Global.getAuthenticationCache(),
+                    user.getStudentID());
+            getRedisTemplate().opsForHash().delete(Global.getAdminauthenticationCache(),
+                    user.getStudentID());
             return new AfRestData("200");
         }
 

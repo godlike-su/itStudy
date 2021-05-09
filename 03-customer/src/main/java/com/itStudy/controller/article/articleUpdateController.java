@@ -92,7 +92,7 @@ public class articleUpdateController
 
         article.setTimeCreate(new Date());
         article.setTimeUpdate(new Date());
-//        article.setAudit(false);  //这里测试不需要通过审核，到时候删除
+        article.setAudit((byte) 1);
 //        article.setDraft((byte) 0); //上传就不设置为草稿了
         try
         {

@@ -25,7 +25,7 @@
     </select>
 
     <select id="findByUserStudentID" parameterType="String" resultType="com.itStudy.entity.User">
-        SELECT id, name, salt, password, phone, qqid, sex, thumb, studentID
+        SELECT id, name, salt, password, phone, qqid, sex, thumb, studentID, role
         FROM user WHERE studentID = #{studentID}
     </select>
 

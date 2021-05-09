@@ -1,7 +1,9 @@
 package com.itStudy.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.itStudy.entity.Access_record;
 import com.itStudy.entity.User;
+import com.itStudy.service.Access_recordService;
 import com.itStudy.service.UserService;
 import com.itStudy.spring.AfRestData;
 import com.itStudy.spring.AfRestError;
@@ -34,6 +36,9 @@ public class LoginController
 {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private Access_recordService access_recordService;
 
     @PostMapping("/login.do")
     public Object login(
@@ -108,9 +113,16 @@ public class LoginController
             object.put("name", user.getName());
             object.put("id", user.getId());
             object.put("sex", user.getSex());
+            object.put("role", user.getRole());
             object.put("thumb", user.getThumb());
             object.put("studentID", user.getStudentID());
 
+            //访问量+1
+            Access_record access_record = new Access_record();
+            access_record.setRole(user.getRole());
+            access_record.setTimeCreate(new Date());
+            access_record.setIsLogin(true);
+            access_recordService.addAccess(access_record);
 
             //构造返回结果
             return new AfRestData(object);
@@ -257,6 +269,30 @@ public class LoginController
         VerifyCodeUtils.outputImage(220,60,os,code);
     }
 
+    //添加访问记录
+    @PostMapping("/addAcess.do")
+    public Object addAcess(@RequestBody JSONObject jreq) throws Exception
+    {
+        //访问量+1
+        Access_record access_record = new Access_record();
+        access_record.setRole(jreq.getString("role"));
+        access_record.setTimeCreate(new Date());
+        if(jreq.getString("role").equals("root")
+                || jreq.getString("role").equals("admin")
+                || jreq.getString("role").equals("user"))
+        {
+            access_record.setIsLogin(true);
+            access_record.setRole(jreq.getString("role"));
+        }
+        else
+        {
+            access_record.setIsLogin(false);
+            access_record.setRole("visitor");
+        }
+
+        access_recordService.addAccess(access_record);
+        return new AfRestData("");
+    }
 
     private RedisTemplate getRedisTemplate(){
         RedisTemplate redisTemplate = (RedisTemplate) ApplicationContextUtils.getBean("redisTemplate");
